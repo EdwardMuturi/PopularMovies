@@ -1,13 +1,11 @@
 package e.deedcorpsinc.popularmovies.adpater;
 
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -15,7 +13,6 @@ import java.net.URL;
 import java.util.List;
 
 import e.deedcorpsinc.popularmovies.R;
-import e.deedcorpsinc.popularmovies.model.Movie;
 
 public class ImageAdapter extends BaseAdapter {
     private static final String IMAGE_ADAPTER_TAG = ImageAdapter.class.getSimpleName();

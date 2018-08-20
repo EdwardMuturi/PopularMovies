@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layoutMovieDetails"
+    android:orientation="vertical"
     tools:context=".MovieDetailsActivity">
+    <ImageView
+        android:layout_width="@dimen/dp250"
+        android:layout_height="@dimen/dp250"
+        android:id="@+id/ivDetailView"
+        android:scaleType="fitXY"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvOverview"
+        android:text="@string/text_overview"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_rating"
+        android:id="@+id/tvRating"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvReleaseDate"
+        android:text="12/03/2018"/>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

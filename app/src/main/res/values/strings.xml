@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PopularMovies</string>
+    <string name="text_sort_by_popularity">Most Popular</string>
+    <string name="text_order_by_top_rated"> Top Rated</string>
+    <string name="text_order_by">Order By:</string>
+    <string name="text_overview">Overview</string>
+    <string name="text_rating">Rating</string>
 </resources>

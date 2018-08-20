@@ -8,7 +8,7 @@ public class Constants {
     public final static String LATEST_MOVIE= "3/movie/latest";
     public final static String TOP_RATED= "3/movie/top_rated";
     public final static String QUERY_PARAMETER= "api_key";
-    public final static String API_KEY= "10f8dad4e5632c8c2d5d941047a01038";
+    public final static String API_KEY= "ENTER YOUR API KEY HERE";
 
     //image URL details
     public final static String IMAGE_BASE_URL= "https://image.tmdb.org";

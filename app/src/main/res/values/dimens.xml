@@ -2,4 +2,6 @@
 <resources>
     <dimen name="hundredDp">100dp</dimen>
     <dimen name="tenDp">10dp</dimen>
+    <dimen name="zerodp">0dp</dimen>
+    <dimen name="dp250">250dp</dimen>
 </resources>

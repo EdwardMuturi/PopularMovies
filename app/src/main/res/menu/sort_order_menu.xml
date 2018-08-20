@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/actionOrderByText"
+        app:showAsAction="always"
+        android:title="@string/text_order_by"/>
+    <item
+        android:id="@+id/actionPopularity"
+        android:orderInCategory="100"
+        android:title="@string/text_sort_by_popularity"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/actionTopRated"
+        android:orderInCategory="101"
+        android:title="@string/text_order_by_top_rated"
+        app:showAsAction="never"/>
+
+
+</menu>
