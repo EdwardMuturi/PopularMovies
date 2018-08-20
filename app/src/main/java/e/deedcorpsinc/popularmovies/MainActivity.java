@@ -21,27 +21,33 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import e.deedcorpsinc.popularmovies.adpater.ImageAdapter;
 import e.deedcorpsinc.popularmovies.model.Movie;
+import e.deedcorpsinc.popularmovies.utilities.AsyncResponse;
 import e.deedcorpsinc.popularmovies.utilities.NetworkUtils;
 
 import static e.deedcorpsinc.popularmovies.utilities.Constants.TOP_RATED;
 import static e.deedcorpsinc.popularmovies.utilities.NetworkUtils.buildImageUrl;
 
-public class MainActivity extends AppCompatActivity {
-    //    @BindView(R.id.test)
-//    ImageView test;
+public class MainActivity extends AppCompatActivity implements AsyncResponse{
+
     final static String TAG = MainActivity.class.getSimpleName();
-    Movie movie = new Movie();
+    Movie[] moviePoster;
+//
+//    @BindView(R.id.ivMoviePoster)
+//    ImageView test;
+    ImageAdapter imageAdapter;
+    private static List<URL> posters= new ArrayList<>();
 
     @BindView(R.id.gridMovieThumbnails)
     GridView gridView;
 
-    String httpsJsonResponse = null;
+    movieDBQueryTask movieDBQueryTask= new movieDBQueryTask();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-//        gridView.setAdapter(new ImageAdapter(this));
+
 
 //        URL imageUrl= buildImageUrl("/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg");
         URL topRatedUrl = NetworkUtils.buildUrl(TOP_RATED);
@@ -58,7 +64,10 @@ public class MainActivity extends AppCompatActivity {
 //               .load(imageUrl.toString())
 //               .into(test);
 
-        new movieDBQueryTask().execute(topRatedUrl);
+
+        movieDBQueryTask.execute(topRatedUrl);
+        movieDBQueryTask.delegate= this;
+
 
         checkInternetConnection();
 
@@ -74,7 +83,20 @@ public class MainActivity extends AppCompatActivity {
             Snackbar.make(gridView, "No Active Internet, Please Connect to Internet to load Images", Snackbar.LENGTH_LONG).show();
     }
 
+    @Override
+    public void processFinish(String output) {
+        posters = makeImageUrlList(output);
+        imageAdapter= new ImageAdapter(this, posters);
+        gridView.setAdapter(imageAdapter);
+
+        for (int h=0; h< posters.size(); h++){
+            Log.e("Posters", posters.get(h).toString() + "\n");
+        }
+
+    }
+
     public class movieDBQueryTask extends AsyncTask<URL, Void, String> {
+        public AsyncResponse delegate= null;
         @Override
         protected String doInBackground(URL... urls) {
             URL movieUrl = urls[0];
@@ -87,16 +109,14 @@ public class MainActivity extends AppCompatActivity {
             return movieDBSearchResults;
         }
 
+
         @Override
         protected void onPostExecute(String s) {
             if (s != null && !s.equals("")) {
                 //Do Something here
                 Log.d(TAG, s);
+                delegate.processFinish(s);
 
-                List<URL> posters= makeImageUrlList(s);
-                for (int h=0; h< posters.size(); h++){
-                    Log.d("Posters", posters.get(h).toString() + "\n");
-                }
             }
         }
     }

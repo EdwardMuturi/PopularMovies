@@ -1,8 +1,11 @@
 package e.deedcorpsinc.popularmovies.model;
 
+import java.net.URL;
+
 public class Movie {
     //variable declaration
-    String title, moviePoster, overview, vote_average, releaseDate;
+    String title, overview, vote_average, releaseDate;
+    URL moviePoster;
 
     //[START] constructor
 
@@ -10,7 +13,11 @@ public class Movie {
 
     }
 
-    public Movie(String title, String moviePoster, String overview, String vote_average, String releaseDate) {
+    public Movie(URL moviePoster) {
+        this.moviePoster= moviePoster;
+    }
+
+    public Movie(String title, URL moviePoster, String overview, String vote_average, String releaseDate) {
 
         this.title = title;
         this.moviePoster = moviePoster;
@@ -29,11 +36,11 @@ public class Movie {
         this.title = title;
     }
 
-    public String getMoviePoster() {
+    public URL getMoviePoster() {
         return moviePoster;
     }
 
-    public void setMoviePoster(String moviePoster) {
+    public void setMoviePoster(URL moviePoster) {
         this.moviePoster = moviePoster;
     }
 

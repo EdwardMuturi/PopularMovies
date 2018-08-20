@@ -9,12 +9,6 @@
     android:verticalSpacing="@dimen/tenDp"
     android:stretchMode="columnWidth"
     android:gravity="center"
-    tools:context=".MainActivity"/>
+    tools:context=".MainActivity">
 
-    <!--<ImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:scaleType="centerCrop"-->
-        <!--android:id="@+id/test"/>-->
-
-<!--</GridView>-->
+</GridView>
