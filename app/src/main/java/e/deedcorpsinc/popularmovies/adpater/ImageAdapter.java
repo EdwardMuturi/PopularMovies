@@ -17,7 +17,7 @@ import e.deedcorpsinc.popularmovies.R;
 public class ImageAdapter extends BaseAdapter {
     private static final String IMAGE_ADAPTER_TAG = ImageAdapter.class.getSimpleName();
     private Context context;
-    List<URL> movie;
+    private List<URL> movie;
 
     public ImageAdapter(Context context, List<URL> movies) {
         this.context = context;
@@ -46,7 +46,7 @@ public class ImageAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         movie.get(position);
         if (convertView == null){
-            convertView= LayoutInflater.from(context).inflate(R.layout.list_item, null);
+            convertView= LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
         }
 
         ImageView imageView= convertView.findViewById(R.id.movieImage);
@@ -58,5 +58,5 @@ public class ImageAdapter extends BaseAdapter {
         return convertView;
     }
 }
-//TODO CREATE A DETAILS ACTIVITY THAT DISPLAYS CLICKED MOVIE DETAILS
+//COMPLETED CREATE A DETAILS ACTIVITY THAT DISPLAYS CLICKED MOVIE DETAILS
 //TODO IMPLEMENT SORT BASED ON POPULARITY OR TOP_RATED CATEGORIES

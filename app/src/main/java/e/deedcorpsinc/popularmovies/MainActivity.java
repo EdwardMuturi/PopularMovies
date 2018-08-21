@@ -23,30 +23,33 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import e.deedcorpsinc.popularmovies.adpater.ImageAdapter;
-import e.deedcorpsinc.popularmovies.model.Movie;
 import e.deedcorpsinc.popularmovies.utilities.AsyncResponse;
+import e.deedcorpsinc.popularmovies.utilities.Constants;
 import e.deedcorpsinc.popularmovies.utilities.NetworkUtils;
 
+import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.POPULAR_MOVIE;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.TOP_RATED;
 
 public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
-    final static String TAG = MainActivity.class.getSimpleName();
+    private final static String TAG = MainActivity.class.getSimpleName();
 
-    ImageAdapter imageAdapter;
-    private static List<URL> posters = new ArrayList<>();
+    private ImageAdapter imageAdapter;
+    private static List<URL> mostPopularURLList = new ArrayList<>();
+    private static List<URL> topRatedURLList = new ArrayList<>();
 
     @BindView(R.id.gridMovieThumbnails)
     GridView gridView;
 
-    movieDBQueryTask movieDBQueryTask = new movieDBQueryTask();
-
-    URL topRatedURL, mostPopularURL;
+    private URL topRatedURL;
+    URL mostPopularURL;
+    List<String> movieDetails= new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +60,12 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
         mostPopularURL= NetworkUtils.buildUrl(POPULAR_MOVIE);
         topRatedURL = NetworkUtils.buildUrl(TOP_RATED);
 
-//       Picasso.get()
-//               .load(imageUrl.toString())
-//               .into(test);
 
+//        movieDBQueryTask.execute(topRatedURL);
+//        movieDBQueryTask.delegate = this;
+        new movieDBQueryTask(topRatedURL).setListener(this, 1).executeOnExecutor(THREAD_POOL_EXECUTOR);
+        new movieDBQueryTask(mostPopularURL).setListener(this, 2).executeOnExecutor(THREAD_POOL_EXECUTOR);
 
-        movieDBQueryTask.execute(topRatedURL);
-        movieDBQueryTask.delegate = this;
 
 
         checkInternetConnection();
@@ -72,9 +74,14 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                posters.get(position);
+                mostPopularURLList.get(position);
+                Bundle detailsBundle= new Bundle();
+                detailsBundle.putInt("POSITION", position);
+                detailsBundle.putString("POSTER_URL", mostPopularURLList.get(position).toString());
+//                detailsBundle.putString("RESPONSE", JSON_RESPONSE);
+
                 Intent detailsIntent = new Intent(MainActivity.this, MovieDetailsActivity.class);
-                detailsIntent.putExtra("POSTER_URL", posters.get(position).toString());
+                detailsIntent.putExtras(detailsBundle);
                 startActivity(detailsIntent);
             }
         });
@@ -83,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
     void checkInternetConnection() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        NetworkInfo activeNetwork = Objects.requireNonNull(connectivityManager).getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         if (isConnected)
             Snackbar.make(gridView, "Active Internet", Snackbar.LENGTH_LONG).show();
@@ -103,12 +110,15 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.actionPopularity) {
-
-
+            imageAdapter= new ImageAdapter(this, mostPopularURLList);
+            gridView.setAdapter(imageAdapter);
+            imageAdapter.notifyDataSetChanged();
             return true;
 
         } else if (item.getItemId() == R.id.actionTopRated){
-
+            imageAdapter= new ImageAdapter(this, topRatedURLList);
+            gridView.setAdapter(imageAdapter);
+            imageAdapter.notifyDataSetChanged();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -116,23 +126,45 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
     //get Async Task result and populate list
     @Override
-    public void processFinish(String output) {
-        posters = makeImageUrlList(output);
-        imageAdapter = new ImageAdapter(this, posters);
-        gridView.setAdapter(imageAdapter);
-
-        for (int h = 0; h < posters.size(); h++) {
-            Log.e("Posters", posters.get(h).toString() + "\n");
+    public void processFinish(String output, int RC) {
+        switch (RC){
+            case 1:
+                topRatedURLList = makeImageUrlList(output);
+                imageAdapter = new ImageAdapter(this, topRatedURLList);
+                Constants.JSON_RESPONSE= output;
+                gridView.setAdapter(imageAdapter);
+                break;
+            case 2:
+                mostPopularURLList = makeImageUrlList(output);
+                imageAdapter = new ImageAdapter(this, mostPopularURLList);
+                Constants.JSON_RESPONSE= output;
+                gridView.setAdapter(imageAdapter);
+                break;
         }
+//        mostPopularURLList = makeImageUrlList(output);
+//        Constants.JSON_RESPONSE= output;
+//        imageAdapter = new ImageAdapter(this, mostPopularURLList);
+//        gridView.setAdapter(imageAdapter);
+//
+//        for (int h = 0; h < mostPopularURLList.size(); h++) {
+//            Log.e("Posters", mostPopularURLList.get(h).toString() + "\n");
+//        }
 
     }
 //Async Task class where we downloading movie Details Json
-    public class movieDBQueryTask extends AsyncTask<URL, Void, String> {
-        public AsyncResponse delegate = null;
+    public static class movieDBQueryTask extends AsyncTask<URL, Void, String> {
+    private final URL passedURL;
+    public AsyncResponse delegate = null;
+        int requestCode;
 
-        @Override
+    movieDBQueryTask(URL chosenURL) {
+        this.passedURL= chosenURL;
+    }
+
+    @Override
         protected String doInBackground(URL... urls) {
-            URL movieUrl = urls[0];
+//            URL movieUrl = urls[0];
+            URL movieUrl = passedURL;
             String movieDBSearchResults = null;
             try {
                 movieDBSearchResults = NetworkUtils.getResponsefromHttpsUrl(movieUrl);
@@ -142,20 +174,28 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
             return movieDBSearchResults;
         }
 
+        movieDBQueryTask setListener(AsyncResponse asyncResponse, int requestCode){
+            this.delegate= asyncResponse;
+            this.requestCode= requestCode;
+            return this;
+        }
+
 
         @Override
         protected void onPostExecute(String s) {
             if (s != null && !s.equals("")) {
                 //Do Something here
+                if (delegate != null){
+                    this.delegate.processFinish(s, requestCode);
+                }
                 Log.d(TAG, s);
-                delegate.processFinish(s);
 
             }
         }
     }
 
     //making image URL from poster paths obtained from JSON response: adding them to a URL list
-    public List<URL> makeImageUrlList(String moviesJsonResponse) {
+    private List<URL> makeImageUrlList(String moviesJsonResponse) {
         List<URL> imageUrlList = new ArrayList<>();
         if (moviesJsonResponse != null) {
             try {
@@ -169,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
                 for (int x = 0; x < result.length(); x++) {
                     JSONObject objectWithPoster = result.optJSONObject(x);
                     String imagePath = objectWithPoster.optString("poster_path");
+
                     URL imageURl = NetworkUtils.buildImageUrl(imagePath);
                     imageUrlList.add(imageURl);
                 }
@@ -188,5 +229,4 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 // COMPLETED  CREATE A PArse class to parse the json string
 //COMPLETED  CREATE AN ASYNC TASK CLASS TO EXECUTE IN BACKGROUND LOADING THE JSON STRING
 //TODO Sort Images by Popularity or Top Rated score
-/**
-  Fetch JSON data for both top rated and Popular movies then initialize the list based on selection and pass adapter**/
+

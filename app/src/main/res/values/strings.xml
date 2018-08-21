@@ -3,6 +3,15 @@
     <string name="text_sort_by_popularity">Most Popular</string>
     <string name="text_order_by_top_rated"> Top Rated</string>
     <string name="text_order_by">Order By:</string>
-    <string name="text_overview">Overview</string>
-    <string name="text_rating">Rating</string>
+    <string name="text_overview"><b>Overview:</b> \n %s</string>
+    <string name="text_rating"><b>Rating:</b>   %s</string>
+    <string name="text_title">Title:   %s</string>
+    <string name="text_release_date">Release Date: \t %s</string>
+    <string name="text_movie_backdrop">Movie Backdrop</string>
+    <string name="text_movie_poster">Movie Poster</string>
+    <string name="text_movie_title">A Really Really Long Movie Title</string>
+    <string name="date_sample">12/03/2018</string>
+    <string name="sample_overview">Movie overview will go here, very long. Goes something like this, blah, blah, blah.....\nMaybe have a say like Gru or something.....
+        I hope this text is long enough to keep it going </string>
+    <string name="text_gridview_poster">GridView Poster</string>
 </resources>

@@ -2,6 +2,12 @@
 <resources>
     <dimen name="hundredDp">100dp</dimen>
     <dimen name="tenDp">10dp</dimen>
+    <dimen name="textSize18sp">18sp</dimen>
     <dimen name="zerodp">0dp</dimen>
-    <dimen name="dp250">250dp</dimen>
+    <dimen name="dp150">150dp</dimen>
+    <dimen name="eightdp">8dp</dimen>
+    <dimen name="fabMargin">16dp</dimen>
+    <dimen name="dp200">200dp</dimen>
+    <dimen name="twodp">2dp</dimen>
+    <dimen name="textSize16sp">16sp</dimen>
 </resources>

@@ -4,8 +4,13 @@ import java.net.URL;
 
 public class Movie {
     //variable declaration
-    String title, overview, vote_average, releaseDate;
-    URL moviePoster;
+    private String title;
+    private String overview;
+    private String vote_average;
+    private String releaseDate;
+
+    private URL moviePoster;
+    private URL backdropPath;
 
     //[START] constructor
 
@@ -13,17 +18,13 @@ public class Movie {
 
     }
 
-    public Movie(URL moviePoster) {
-        this.moviePoster= moviePoster;
-    }
-
-    public Movie(String title, URL moviePoster, String overview, String vote_average, String releaseDate) {
-
-        this.title = title;
-        this.moviePoster = moviePoster;
+    //constructor without moviePoster field
+    public Movie(String originalTitle, String overview, String vote_average, String releaseDate, String title, URL backdropPath) {
         this.overview = overview;
         this.vote_average = vote_average;
         this.releaseDate = releaseDate;
+        this.title= title;
+        this.backdropPath= backdropPath;
     }
     //[END] Constructor
 
@@ -32,41 +33,26 @@ public class Movie {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public URL getMoviePoster() {
-        return moviePoster;
-    }
-
-    public void setMoviePoster(URL moviePoster) {
-        this.moviePoster = moviePoster;
+    public String getoriginalTitle() {
+        return title;
     }
 
     public String getOverview() {
         return overview;
     }
 
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
     public String getVote_average() {
         return vote_average;
-    }
-
-    public void setVote_average(String vote_average) {
-        this.vote_average = vote_average;
     }
 
     public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
+    public URL getBackdropPath() {
+        return backdropPath;
     }
+
     //[END] Setter and Getter
 
 }
