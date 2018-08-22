@@ -8,8 +8,8 @@ public class Constants {
     public final static String LATEST_MOVIE= "3/movie/latest";
     public final static String TOP_RATED= "3/movie/top_rated";
     public final static String QUERY_PARAMETER= "api_key";
-    public final static String API_KEY= "ENTER_YOUR_API_KEY_HERE";
-    public final static String API_KEY_TO_COMPARE= "ENTER_YOUR_API_KEY_HERE";
+    public final static String API_KEY= "ENTER_API_KEY_HERE";
+    public final static String API_KEY_TO_COMPARE= "ENTER_API_KEY_HERE";
 
     public static String JSON_RESPONSE;
 

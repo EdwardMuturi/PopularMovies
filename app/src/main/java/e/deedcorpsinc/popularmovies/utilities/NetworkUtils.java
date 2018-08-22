@@ -3,10 +3,16 @@ package e.deedcorpsinc.popularmovies.utilities;
 import android.net.Uri;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -78,6 +84,33 @@ public class NetworkUtils {
             httpsURLConnection.disconnect();
         }
 
+    }
+
+    public static List<URL> makeImageUrlList(String moviesJsonResponse) {
+        List<URL> imageUrlList = new ArrayList<>();
+        if (moviesJsonResponse != null) {
+            try {
+                //fetch movie list
+                JSONObject movies = new JSONObject(moviesJsonResponse);
+
+                //fetch result array
+                JSONArray result = movies.optJSONArray("results");
+
+                //fetch poster path, convert to url and add to list
+                for (int x = 0; x < result.length(); x++) {
+                    JSONObject objectWithPoster = result.optJSONObject(x);
+                    String imagePath = objectWithPoster.optString("poster_path");
+
+                    URL imageURl = NetworkUtils.buildImageUrl(imagePath);
+                    imageUrlList.add(imageURl);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.e(TAG, "Null Json Response");
+        }
+        return imageUrlList;
     }
 
 

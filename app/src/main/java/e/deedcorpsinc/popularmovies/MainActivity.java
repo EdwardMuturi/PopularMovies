@@ -4,22 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +23,13 @@ import butterknife.ButterKnife;
 import e.deedcorpsinc.popularmovies.adpater.ImageAdapter;
 import e.deedcorpsinc.popularmovies.utilities.AsyncResponse;
 import e.deedcorpsinc.popularmovies.utilities.Constants;
+import e.deedcorpsinc.popularmovies.utilities.MovieDBQueryTask;
 import e.deedcorpsinc.popularmovies.utilities.NetworkUtils;
 
 import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.POPULAR_MOVIE;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.TOP_RATED;
+import static e.deedcorpsinc.popularmovies.utilities.NetworkUtils.makeImageUrlList;
 
 public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
@@ -63,8 +58,8 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
 //        movieDBQueryTask.execute(topRatedURL);
 //        movieDBQueryTask.delegate = this;
-        new movieDBQueryTask(topRatedURL).setListener(this, 1).executeOnExecutor(THREAD_POOL_EXECUTOR);
-        new movieDBQueryTask(mostPopularURL).setListener(this, 2).executeOnExecutor(THREAD_POOL_EXECUTOR);
+        new MovieDBQueryTask(topRatedURL).setListener(this, 1).executeOnExecutor(THREAD_POOL_EXECUTOR);
+        new MovieDBQueryTask(mostPopularURL).setListener(this, 2).executeOnExecutor(THREAD_POOL_EXECUTOR);
 
 
 
@@ -152,75 +147,10 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
     }
 //Async Task class where we downloading movie Details Json
-    public static class movieDBQueryTask extends AsyncTask<URL, Void, String> {
-    private final URL passedURL;
-    public AsyncResponse delegate = null;
-        int requestCode;
 
-    movieDBQueryTask(URL chosenURL) {
-        this.passedURL= chosenURL;
-    }
-
-    @Override
-        protected String doInBackground(URL... urls) {
-//            URL movieUrl = urls[0];
-            URL movieUrl = passedURL;
-            String movieDBSearchResults = null;
-            try {
-                movieDBSearchResults = NetworkUtils.getResponsefromHttpsUrl(movieUrl);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return movieDBSearchResults;
-        }
-
-        movieDBQueryTask setListener(AsyncResponse asyncResponse, int requestCode){
-            this.delegate= asyncResponse;
-            this.requestCode= requestCode;
-            return this;
-        }
-
-
-        @Override
-        protected void onPostExecute(String s) {
-            if (s != null && !s.equals("")) {
-                //Do Something here
-                if (delegate != null){
-                    this.delegate.processFinish(s, requestCode);
-                }
-                Log.d(TAG, s);
-
-            }
-        }
-    }
 
     //making image URL from poster paths obtained from JSON response: adding them to a URL list
-    private List<URL> makeImageUrlList(String moviesJsonResponse) {
-        List<URL> imageUrlList = new ArrayList<>();
-        if (moviesJsonResponse != null) {
-            try {
-                //fetch movie list
-                JSONObject movies = new JSONObject(moviesJsonResponse);
 
-                //fetch result array
-                JSONArray result = movies.optJSONArray("results");
-
-                //fetch poster path, convert to url and add to list
-                for (int x = 0; x < result.length(); x++) {
-                    JSONObject objectWithPoster = result.optJSONObject(x);
-                    String imagePath = objectWithPoster.optString("poster_path");
-
-                    URL imageURl = NetworkUtils.buildImageUrl(imagePath);
-                    imageUrlList.add(imageURl);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Log.e(TAG, "Null Json Response");
-        }
-        return imageUrlList;
-    }
 
 }
 
