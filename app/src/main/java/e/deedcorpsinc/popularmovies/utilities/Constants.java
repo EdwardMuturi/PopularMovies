@@ -1,5 +1,9 @@
 package e.deedcorpsinc.popularmovies.utilities;
 
+import android.os.Build;
+
+import e.deedcorpsinc.popularmovies.BuildConfig;
+
 public class Constants {
 //Movie URL details
     public final static String MOVIEDB_BASE_URL= "https://api.themoviedb.org";
@@ -8,8 +12,8 @@ public class Constants {
     public final static String LATEST_MOVIE= "3/movie/latest";
     public final static String TOP_RATED= "3/movie/top_rated";
     public final static String QUERY_PARAMETER= "api_key";
-    public final static String API_KEY= "ENTER_API_KEY_HERE";
-    public final static String API_KEY_TO_COMPARE= "ENTER_API_KEY_HERE";
+    public final static String API_KEY= BuildConfig.API_KEY;
+    public final static String API_KEY_TO_COMPARE= BuildConfig.API_KEY_TO_COMPARE;
 
     public static String JSON_RESPONSE;
 

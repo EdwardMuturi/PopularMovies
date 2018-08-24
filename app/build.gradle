@@ -9,6 +9,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //themoviedb API key reference
+        buildConfigField("String", "API_KEY", API_KEY)
+        buildConfigField("String", "API_KEY_TO_COMPARE", API_KEY_TO_COMPARE)
     }
     buildTypes {
         release {
