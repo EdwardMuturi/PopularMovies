@@ -2,7 +2,7 @@
 Udacity Nano degree Second Project, querying The MovieDB API to display movie details
 
 ## Screen Shots :camera:
-![Grid Image](app/src/main/res/drawable/popularMoviesGrid.png) | ![Sort Menu Image](app/src/main/res/drawable/sortMenu.png) | ![Details Screen Image](app/src/main/res/drawable/detailsScreen.png)
+![Grid Image](app/src/main/res/drawable/popular_movies_grid.png) | ![Sort Menu Image](app/src/main/res/drawable/sort_menu.png) | ![Details Screen Image](app/src/main/res/drawable/details_screen.png)
 ---------------------------------------------------------------|------------------------------------------------------------|---------------------------------------------------------------------
 **Poster Grid** | **Sort By Top Rated or Most Popular** | **Display Selected Movie Details**
 
