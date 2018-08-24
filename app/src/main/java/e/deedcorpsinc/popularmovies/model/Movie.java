@@ -1,16 +1,19 @@
 package e.deedcorpsinc.popularmovies.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.net.URL;
 
-public class Movie {
+public class Movie implements Parcelable{
     //variable declaration
     private String title;
     private String overview;
     private String vote_average;
     private String releaseDate;
 
-    private URL moviePoster;
-    private URL backdropPath;
+    private String moviePoster;
+    private String backdropPath;
 
     //[START] constructor
 
@@ -19,7 +22,7 @@ public class Movie {
     }
 
     //constructor without moviePoster field
-    public Movie(String originalTitle, String overview, String vote_average, String releaseDate, String title, URL backdropPath) {
+    public Movie(String originalTitle, String overview, String vote_average, String releaseDate, String title, String backdropPath) {
         this.overview = overview;
         this.vote_average = vote_average;
         this.releaseDate = releaseDate;
@@ -49,10 +52,53 @@ public class Movie {
         return releaseDate;
     }
 
-    public URL getBackdropPath() {
+    public String getBackdropPath() {
         return backdropPath;
     }
 
     //[END] Setter and Getter
+
+    //[START] Parcelable methods
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int  flags) {
+        parcel.writeString(title);
+        parcel.writeString(overview);
+        parcel.writeString(vote_average);
+        parcel.writeString(releaseDate);
+
+        parcel.writeString(moviePoster.toString());
+        parcel.writeString(backdropPath.toString());
+
+    }
+
+    private Movie (Parcel input){
+        title= input.readString();
+        overview= input.readString();
+        vote_average= input.readString();
+        releaseDate= input.readString();
+        moviePoster=  input.readString();
+        backdropPath= input.readString();
+    }
+
+    public  static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>(){
+
+        @Override
+        public Movie createFromParcel(Parcel parcel) {
+           return new Movie(parcel);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    //[END] Parcelable methods
+
 
 }

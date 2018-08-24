@@ -14,3 +14,7 @@ Udacity Nano degree Second Project, querying The MovieDB API to display movie de
 
 ##### *References: :link:*
  [Constraint Layout Guidelines, Barriers, Chains and Groups - Riggaroo – Android Dev]( https://riggaroo.co.za/constraintlayout-guidelines-barriers-chains-groups/)
+
+ [GitHub: Hiding (secret) API keys – Tutorial](https://richardroseblog.wordpress.com/2016/05/29/hiding-secret-api-keys-from-git/)
+
+ [Using Parcelable](https://guides.codepath.com/android/using-parcelable)

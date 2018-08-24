@@ -65,7 +65,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     .load(poster)
                     .into(imageView);
 
-            String backdrop = movieDetails.getBackdropPath().toString();
+            String backdrop = movieDetails.getBackdropPath();
             Picasso.get()
                     .load(backdrop)
 //                    .error("Could Not load Image")
@@ -96,7 +96,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 String backdropPath = movieDetailsObject.optString(FIELD_BACKDROP_PATH);
                 URL backdropURL = NetworkUtils.buildImageUrl(backdropPath);
 
-                movieDetails = new Movie(originalTitle, overview, rating, releaseDate, title, backdropURL);
+                movieDetails = new Movie(originalTitle, overview, rating, releaseDate, title, backdropURL.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
