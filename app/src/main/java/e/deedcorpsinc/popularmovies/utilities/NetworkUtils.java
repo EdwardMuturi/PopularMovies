@@ -24,7 +24,9 @@ import static e.deedcorpsinc.popularmovies.utilities.Constants.IMAGE_SIZE;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.LANGUAGE_QUERY_PARAMETER;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.LANGUAGE_STRING;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.MOVIEDB_BASE_URL;
+import static e.deedcorpsinc.popularmovies.utilities.Constants.MOVIE_ENDPOINT;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.QUERY_PARAMETER;
+import static e.deedcorpsinc.popularmovies.utilities.Constants.VIDEO_PATH;
 
 public class NetworkUtils {
     private final static String TAG= NetworkUtils.class.getSimpleName();
@@ -49,6 +51,21 @@ public class NetworkUtils {
             }
 
         return movieUrl;
+    }
+
+    public static URL buildVdieoUrl(String id){
+        URL videoUrl= null;
+        Uri builtVideoUri= Uri.parse(MOVIEDB_BASE_URL).buildUpon()
+                .path(MOVIE_ENDPOINT + id + VIDEO_PATH)
+                .appendQueryParameter(QUERY_PARAMETER, API_KEY)
+                .appendQueryParameter(LANGUAGE_QUERY_PARAMETER, LANGUAGE_STRING)
+                .build();
+        try {
+            videoUrl= new URL(builtVideoUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return videoUrl;
     }
 
     public static URL buildImageUrl(String imagePath){

@@ -21,6 +21,10 @@ public class Constants {
     public final static String IMAGE_BASE_URL= "https://image.tmdb.org";
     public final static String IMAGE_SIZE= "t/p/w185/";
     public static String POSTER_PATH= "";
+    //video endpoint
+    public static String movieId= "id";
+    public static final String MOVIE_ENDPOINT= "3/movie/";
+    public static final String VIDEO_PATH= "/videos";
 
     //optional parameters
     public final static String LANGUAGE_QUERY_PARAMETER= "language";

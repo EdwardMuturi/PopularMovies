@@ -15,6 +15,10 @@ public class Movie implements Parcelable{
     private String moviePoster;
     private String backdropPath;
 
+
+
+    private String movieId;
+
     //[START] constructor
 
     public Movie() {
@@ -22,16 +26,17 @@ public class Movie implements Parcelable{
     }
 
     //constructor without moviePoster field
-    public Movie(String originalTitle, String overview, String vote_average, String releaseDate, String title, String backdropPath) {
+    public Movie(String originalTitle, String overview, String vote_average, String releaseDate, String title, String backdropPath, String mId) {
         this.overview = overview;
         this.vote_average = vote_average;
         this.releaseDate = releaseDate;
         this.title= title;
         this.backdropPath= backdropPath;
+        this.movieId= mId;
     }
     //[END] Constructor
 
-    // [START] Setters and Gettes
+    // [START] Setters and Getters
     public String getTitle() {
         return title;
     }
@@ -54,6 +59,10 @@ public class Movie implements Parcelable{
 
     public String getBackdropPath() {
         return backdropPath;
+    }
+
+    public String getMovieId() {
+        return movieId;
     }
 
     //[END] Setter and Getter

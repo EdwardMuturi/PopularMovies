@@ -35,6 +35,10 @@ public class MovieDBQueryTask extends AsyncTask<URL, Void, String> {
         return this;
     }
 
+    public MovieDBQueryTask setListener(AsyncResponse asyncResponseY){
+        this.delegate= asyncResponseY;
+        return this;
+    }
 
     @Override
     protected void onPostExecute(String s) {
@@ -42,6 +46,7 @@ public class MovieDBQueryTask extends AsyncTask<URL, Void, String> {
             //Do Something here
             if (delegate != null){
                 this.delegate.processFinish(s, requestCode);
+                this.delegate.processFinish(s);
             }
             Log.d(TAG, s);
 

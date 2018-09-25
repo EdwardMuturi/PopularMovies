@@ -10,4 +10,5 @@
     <dimen name="dp200">200dp</dimen>
     <dimen name="twodp">2dp</dimen>
     <dimen name="textSize16sp">16sp</dimen>
+    <dimen name="backdrop_height">250dp</dimen>
 </resources>

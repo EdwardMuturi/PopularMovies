@@ -4,12 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MovieDetailsActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/constraintTrailer">
 
         <ImageView
             android:id="@+id/ivBackDrop"
@@ -28,16 +34,24 @@
         <ImageView
             android:id="@+id/ivDetailPoster"
             android:layout_width="@dimen/zerodp"
-            android:layout_height="@dimen/dp150"
+            android:layout_height="170dp"
             android:layout_marginStart="@dimen/zerodp"
             android:layout_marginTop="@dimen/zerodp"
             android:contentDescription="@string/text_movie_poster"
             app:layout_constraintBottom_toBottomOf="@id/ivBackDrop"
-            app:layout_constraintDimensionRatio="w, 400:576"
+            app:layout_constraintDimensionRatio="w, 450:576"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"
             app:layout_constraintTop_toBottomOf="@id/ivBackDrop"
             app:layout_constraintVertical_bias="0.52" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fabPlayTrailer"
+            app:layout_constraintTop_toBottomOf="@id/ivBackDrop"
+            app:layout_constraintBottom_toBottomOf="@id/ivBackDrop"
+            app:layout_constraintRight_toLeftOf="@id/guideline_vertical_end"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline_vertical_start"
@@ -52,12 +66,11 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/eightdp"
             android:layout_marginStart="@dimen/eightdp"
-            android:layout_marginTop="@dimen/fabMargin"
             android:text="@string/text_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="@dimen/textSize18sp"
             app:layout_constraintStart_toEndOf="@id/ivDetailPoster"
-            app:layout_constraintTop_toBottomOf="@id/ivBackDrop"
+            app:layout_constraintTop_toBottomOf="@id/fabPlayTrailer"
             tools:text="@string/text_movie_title" />
 
         <TextView
@@ -138,4 +151,12 @@
 
     </android.support.constraint.ConstraintLayout>
 
-    </ScrollView>
+    <VideoView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/videoView"
+        android:visibility="gone"/>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
         new MovieDBQueryTask(mostPopularURL).setListener(this, 2).executeOnExecutor(THREAD_POOL_EXECUTOR);
 
 
-
         checkInternetConnection();
 
         //Handling poster click: open movie details
@@ -144,6 +143,11 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 //        for (int h = 0; h < mostPopularURLList.size(); h++) {
 //            Log.e("Posters", mostPopularURLList.get(h).toString() + "\n");
 //        }
+
+    }
+
+    @Override
+    public void processFinish(String output) {
 
     }
 //Async Task class where we downloading movie Details Json
