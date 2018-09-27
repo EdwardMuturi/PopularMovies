@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="@dimen/tenDp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtReviewContent"
+        tools:text="@string/sample_overview"
+        android:textSize="@dimen/textSize18sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtReviewAuthor"
+        app:layout_constraintTop_toBottomOf="@id/txtReviewContent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="@string/sample_review_author"
+        android:textSize="@dimen/textSize16sp"/>
+
+    <View
+        android:id="@+id/view_divider_below"
+        android:layout_width="@dimen/zerodp"
+        android:layout_height="@dimen/twodp"
+        android:layout_marginTop="@dimen/eightdp"
+        android:background="@color/gray_divider"
+        app:layout_constraintTop_toBottomOf="@id/txtReviewAuthor" />
+
+</android.support.constraint.ConstraintLayout>

@@ -14,4 +14,6 @@
     <string name="sample_overview">Movie overview will go here, very long. Goes something like this, blah, blah, blah.....\nMaybe have a say like Gru or something.....
         I hope this text is long enough to keep it going </string>
     <string name="text_gridview_poster">GridView Poster</string>
+    <string name="text_reviews">Reviews</string>
+    <string name="sample_review_author">EdwardMuturi</string>
 </resources>

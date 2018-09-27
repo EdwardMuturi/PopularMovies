@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
     @BindView(R.id.gridMovieThumbnails)
     GridView gridView;
+    
 
     private URL topRatedURL;
     URL mostPopularURL;

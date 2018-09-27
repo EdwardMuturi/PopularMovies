@@ -1,15 +1,13 @@
 package e.deedcorpsinc.popularmovies;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -21,11 +19,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import e.deedcorpsinc.popularmovies.fragment.ReviewsFragment;
 import e.deedcorpsinc.popularmovies.model.Movie;
+import e.deedcorpsinc.popularmovies.model.Review;
 import e.deedcorpsinc.popularmovies.model.Video;
 import e.deedcorpsinc.popularmovies.utilities.AsyncResponse;
 import e.deedcorpsinc.popularmovies.utilities.Constants;
@@ -34,6 +36,8 @@ import e.deedcorpsinc.popularmovies.utilities.NetworkUtils;
 
 import static e.deedcorpsinc.popularmovies.utilities.Constants.FIELD_BACKDROP_PATH;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.FIELD_TITLE;
+import static e.deedcorpsinc.popularmovies.utilities.Constants.REVIEWS_PATH;
+import static e.deedcorpsinc.popularmovies.utilities.Constants.VIDEO_PATH;
 
 public class MovieDetailsActivity extends AppCompatActivity implements AsyncResponse {
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
@@ -58,8 +62,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
     @BindView(R.id.constraintTrailer)
     ConstraintLayout constraintLayout;
 
-    @BindView(R.id.videoView)
-    VideoView videoView;
+
 
     Movie movieDetails;
 
@@ -67,6 +70,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
     URL videoUrl;
     String trailerID;
     Video video;
+
+    //Review object list to be passed to fragment
+    List<Review> reviewList= new ArrayList<>();
+    URL reviewsURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +107,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
             tvTitle.setText(movieDetails.getTitle());
             setTitle(movieDetails.getoriginalTitle());
 
-            videoUrl = NetworkUtils.buildVdieoUrl(movieDetails.getMovieId());
+            videoUrl = NetworkUtils.buildMyUrl(movieDetails.getMovieId(), VIDEO_PATH);
+            reviewsURL= NetworkUtils.buildMyUrl(movieDetails.getMovieId(), REVIEWS_PATH);
             new MovieDBQueryTask(videoUrl).setListener(this).execute();
 
         }
@@ -136,6 +144,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
         return movieDetails;
     }
 
+    //TODO move this method to a different class/folder later
+    public void viewReviews(){
+        FragmentManager fragmentManager= getSupportFragmentManager();
+        ReviewsFragment reviewsFragment= ReviewsFragment.newInstance(reviewsURL.toString());
+//        reviewsFragment.show(fragmentManager, "Reviews Fragment");
+    }
+
     //Click Handlers [START]
     @OnClick(R.id.fabPlayTrailer)
     void playTrailer() {
@@ -143,6 +158,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
         Log.e("TRailer", video.getKey());
 
     }
+
+    @OnClick(R.id.tvReviews)
+    void showReviews(){
+        viewReviews();
+    }
+    //Click Handlers [END]
 
     @Override
     public void processFinish(String output, int requestCode) {

@@ -14,6 +14,7 @@ public class Constants {
     public final static String QUERY_PARAMETER= "api_key";
     public final static String API_KEY= BuildConfig.API_KEY;
     public final static String API_KEY_TO_COMPARE= BuildConfig.API_KEY_TO_COMPARE;
+    public static final String KEY_REVIEWS = "REVIEWS";
 
     public static String JSON_RESPONSE;
 
@@ -25,6 +26,7 @@ public class Constants {
     public static String movieId= "id";
     public static final String MOVIE_ENDPOINT= "3/movie/";
     public static final String VIDEO_PATH= "/videos";
+    public static final String REVIEWS_PATH= "/reviews";
 
     //optional parameters
     public final static String LANGUAGE_QUERY_PARAMETER= "language";

@@ -2,9 +2,13 @@ package e.deedcorpsinc.popularmovies.utilities;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import java.io.IOException;
 import java.net.URL;
+
+import e.deedcorpsinc.popularmovies.MainActivity;
 
 public class MovieDBQueryTask extends AsyncTask<URL, Void, String> {
     private final URL passedURL;
@@ -15,6 +19,7 @@ public class MovieDBQueryTask extends AsyncTask<URL, Void, String> {
     public MovieDBQueryTask(URL chosenURL) {
         this.passedURL= chosenURL;
     }
+
 
     @Override
     protected String doInBackground(URL... urls) {

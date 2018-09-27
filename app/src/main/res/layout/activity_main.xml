@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/gridMovieThumbnails"
-    android:numColumns="auto_fit"
-    android:columnWidth="@dimen/hundredDp"
-    android:verticalSpacing="@dimen/tenDp"
-    android:stretchMode="columnWidth"
-    android:gravity="center"
-    tools:context=".MainActivity">
+<!--<LinearLayout-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--tools:context=".MainActivity">-->
+    <GridView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/gridMovieThumbnails"
+        android:numColumns="auto_fit"
+        android:columnWidth="@dimen/hundredDp"
+        android:verticalSpacing="@dimen/tenDp"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        tools:context=".MainActivity">
 
-</GridView>
+    </GridView>
+
+    <!--<ProgressBar-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--style="@android:style/Widget.ProgressBar.Large"-->
+        <!--android:id="@+id/progress_circular"/>-->
+<!--</LinearLayout>-->

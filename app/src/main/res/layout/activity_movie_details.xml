@@ -4,25 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MovieDetailsActivity">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
     <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/constraintTrailer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/constraintTrailer">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/ivBackDrop"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp200"
-            android:layout_marginEnd="@dimen/zerodp"
             android:layout_marginStart="@dimen/zerodp"
+            android:layout_marginEnd="@dimen/zerodp"
             android:contentDescription="@string/text_movie_backdrop"
             android:fitsSystemWindows="false"
             android:scaleType="centerCrop"
@@ -46,12 +42,12 @@
             app:layout_constraintVertical_bias="0.52" />
 
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabPlayTrailer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/fabPlayTrailer"
-            app:layout_constraintTop_toBottomOf="@id/ivBackDrop"
             app:layout_constraintBottom_toBottomOf="@id/ivBackDrop"
-            app:layout_constraintRight_toLeftOf="@id/guideline_vertical_end"/>
+            app:layout_constraintRight_toLeftOf="@id/guideline_vertical_end"
+            app:layout_constraintTop_toBottomOf="@id/ivBackDrop" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline_vertical_start"
@@ -64,8 +60,8 @@
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/eightdp"
             android:layout_marginStart="@dimen/eightdp"
+            android:layout_marginEnd="@dimen/eightdp"
             android:text="@string/text_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="@dimen/textSize18sp"
@@ -121,6 +117,22 @@
             app:layout_constraintTop_toTopOf="@id/barrier_bottom_poster"
             tools:text="Rating" />
 
+        <TextView
+            android:id="@+id/tvReviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/eightdp"
+            android:layout_marginTop="@dimen/fabMargin"
+            android:text="@string/text_reviews"
+            android:textSize="@dimen/textSize18sp"
+            app:layout_constraintEnd_toStartOf="@id/guideline_vertical_end"
+            app:layout_constraintTop_toTopOf="@id/barrier_bottom_poster"
+            android:clickable="true"
+            tools:text="@string/text_reviews"
+            android:focusable="true" />
+
+
+
         <View
             android:id="@+id/view_divider_below"
             android:layout_width="@dimen/zerodp"
@@ -131,13 +143,15 @@
             app:layout_constraintStart_toStartOf="@id/guideline_vertical_start"
             app:layout_constraintTop_toBottomOf="@id/tvRating" />
 
+
+
         <TextView
             android:id="@+id/tvOverview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/fabMargin"
             android:layout_marginStart="@dimen/fabMargin"
             android:layout_marginTop="@dimen/tenDp"
+            android:layout_marginEnd="@dimen/fabMargin"
             android:fontFamily="sans-serif"
             android:text="@string/text_overview"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -150,13 +164,5 @@
             tools:text="@string/sample_overview" />
 
     </android.support.constraint.ConstraintLayout>
-
-    <VideoView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/videoView"
-        android:visibility="gone"/>
-
-    </LinearLayout>
 
 </ScrollView>
