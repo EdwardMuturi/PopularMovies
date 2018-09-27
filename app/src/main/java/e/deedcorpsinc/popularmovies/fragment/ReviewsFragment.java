@@ -63,51 +63,51 @@ public class ReviewsFragment extends Fragment implements AsyncResponse {
         return fragment;
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        //Check if passed serialized object is null
-        if (getArguments() != null) {
-            userReviews = getArguments().getString(Constants.KEY_REVIEWS);
-            try {
-                reviewsURL= new URL(userReviews);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+//    @NonNull
+//    @Override
+//    public Dialog onCreateDialog(Bundle savedInstanceState) {
+//        //Check if passed serialized object is null
+//        if (getArguments() != null) {
+//            userReviews = getArguments().getString(Constants.KEY_REVIEWS);
+//            try {
+//                reviewsURL= new URL(userReviews);
+//            } catch (MalformedURLException e) {
+//                e.printStackTrace();
+//            }
+//
+//
+//        }
+//
+//        AlertDialog.Builder alertDialogBuilder= new AlertDialog.Builder(getActivity());
+//        alertDialogBuilder.setTitle("Reviews");
+//        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//        return alertDialogBuilder.create();
+//    }
 
-
-        }
-
-        AlertDialog.Builder alertDialogBuilder= new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle("Reviews");
-        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        return alertDialogBuilder.create();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        new MovieDBQueryTask(reviewsURL).setListener((AsyncResponse) getActivity()).execute();
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Nullable
+   @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_reviews, container);
+        View view= inflater.inflate(R.layout.fragment_reviews, container, false);
         ButterKnife.bind(this, view);
         getReviews(REVIEWS_RESPONSE);
 
+        new MovieDBQueryTask(reviewsURL).setListener(this).execute();
         Log.e(TAG, "something called");
 
         reviewsAdapter= new ReviewsAdapter(reviewList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(reviewsAdapter);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

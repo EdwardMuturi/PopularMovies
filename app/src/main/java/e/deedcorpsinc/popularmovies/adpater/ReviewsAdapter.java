@@ -39,6 +39,11 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
 
     }
 
+    public void refreshList(List<Review> reviewList1){
+        this.reviewList= reviewList1;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return reviewList.size();

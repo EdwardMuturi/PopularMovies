@@ -7,12 +7,12 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher_app_logo_round"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_app_logo_round"
         android:supportsRtl="true"
-        android:theme="@style/customTheme"
-        android:fullBackupContent="@xml/backup_descriptor">
+        android:theme="@style/customTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,8 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MovieDetailsActivity"
-            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".MovieDetailsActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".ReviewActivity"></activity>
     </application>
 
 </manifest>

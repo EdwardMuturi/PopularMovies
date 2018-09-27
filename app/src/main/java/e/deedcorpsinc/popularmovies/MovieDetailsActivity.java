@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -146,9 +147,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
 
     //TODO move this method to a different class/folder later
     public void viewReviews(){
-        FragmentManager fragmentManager= getSupportFragmentManager();
-        ReviewsFragment reviewsFragment= ReviewsFragment.newInstance(reviewsURL.toString());
-//        reviewsFragment.show(fragmentManager, "Reviews Fragment");
+//        FragmentManager fragmentManager= getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
+//        ReviewsFragment reviewsFragment= ReviewsFragment.newInstance(reviewsURL.toString());
+//        fragmentTransaction.add(R.id.gridFrameLayout, reviewsFragment);
+//        fragmentTransaction.commit();
+
+        Intent reviewsInte= new Intent(this, ReviewActivity.class);
+        reviewsInte.putExtra("REVIEWS", reviewsURL.toString());
+        startActivity(reviewsInte);
     }
 
     //Click Handlers [START]
