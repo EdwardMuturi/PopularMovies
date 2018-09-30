@@ -16,4 +16,9 @@
     <string name="text_gridview_poster">GridView Poster</string>
     <string name="text_reviews">Reviews</string>
     <string name="sample_review_author">EdwardMuturi</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_play_trailer_button">Play Trailer Button</string>
+    <string name="sample_text_trailer_name">Movie Name Trailer 1</string>
 </resources>

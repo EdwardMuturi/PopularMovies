@@ -1,7 +1,11 @@
 package e.deedcorpsinc.popularmovies.model;
 
 
-public class Video {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Video implements Serializable {
 
     private String id;
 
@@ -18,6 +22,7 @@ public class Video {
     private Integer size;
 
     private String type;
+    private ArrayList<Video> videoList;
 
 
     public Video() {
@@ -45,6 +50,8 @@ public class Video {
         this.type = type;
     }
 
+
+    //Setters and Getters
     public String getId() {
         return id;
     }
@@ -109,4 +116,11 @@ public class Video {
         this.type = type;
     }
 
+    public void setVideos(ArrayList<Video>videos){
+        this.videoList= videos;
+    }
+
+    public ArrayList<Video> getVideoList() {
+        return videoList;
+    }
 }

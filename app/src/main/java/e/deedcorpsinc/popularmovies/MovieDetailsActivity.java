@@ -2,16 +2,15 @@ package e.deedcorpsinc.popularmovies;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.squareup.picasso.Picasso;
 
@@ -26,7 +25,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import e.deedcorpsinc.popularmovies.adpater.ViewPagerAdapter;
+import e.deedcorpsinc.popularmovies.fragment.OverviewFragment;
 import e.deedcorpsinc.popularmovies.fragment.ReviewsFragment;
+import e.deedcorpsinc.popularmovies.fragment.TrailerFragment;
 import e.deedcorpsinc.popularmovies.model.Movie;
 import e.deedcorpsinc.popularmovies.model.Review;
 import e.deedcorpsinc.popularmovies.model.Video;
@@ -38,7 +40,7 @@ import e.deedcorpsinc.popularmovies.utilities.NetworkUtils;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.FIELD_BACKDROP_PATH;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.FIELD_TITLE;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.REVIEWS_PATH;
-import static e.deedcorpsinc.popularmovies.utilities.Constants.VIDEO_PATH;
+import static e.deedcorpsinc.popularmovies.utilities.Constants.TRAILER_PATH;
 
 public class MovieDetailsActivity extends AppCompatActivity implements AsyncResponse {
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
@@ -48,14 +50,20 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
     @BindView(R.id.ivBackDrop)
     ImageView ivBackdrop;
 
-    @BindView(R.id.tvOverview)
-    TextView tvOverview;
+//    @BindView(R.id.tvOverview)
+//    TextView tvOverview;
 
     @BindView(R.id.tvTitle)
     TextView tvTitle;
 
-    @BindView(R.id.tvRating)
-    TextView tvRating;
+    @BindView(R.id.tabDetails)
+    TabLayout tabLayout;
+
+    @BindView(R.id.viewpagerDetails)
+    ViewPager viewPager;
+
+//    @BindView(R.id.tvRating)
+//    TextView tvRating;
 
     @BindView(R.id.tvReleaseDate)
     TextView tvReleaseDate;
@@ -67,8 +75,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
 
     Movie movieDetails;
 
-    private static String VIDEO_RESPONSE;
-    URL videoUrl;
+    private static String TRAILER_RESPONSE;
+    URL trailerUrl;
     String trailerID;
     Video video;
 
@@ -91,6 +99,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
             int posterPosition = detailsBundle.getInt("POSITION");
             movieDetails = getMovieDetails(posterPosition);
 
+            //TODO get value from class to prevent wrong poster display
             String poster = detailsBundle.getString("POSTER_URL");
             Picasso.get()
                     .load(poster)
@@ -102,17 +111,33 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
 //                    .error("Could Not load Image")
                     .into(ivBackdrop);
 
-            tvOverview.setText(movieDetails.getOverview());
-            tvRating.setText(getString(R.string.text_rating, movieDetails.getVote_average()));
+//            tvOverview.setText(movieDetails.getOverview());
+//            tvRating.setText(getString(R.string.text_rating, movieDetails.getVote_average()));
             tvReleaseDate.setText(getString(R.string.text_release_date, movieDetails.getReleaseDate()));
             tvTitle.setText(movieDetails.getTitle());
             setTitle(movieDetails.getoriginalTitle());
 
-            videoUrl = NetworkUtils.buildMyUrl(movieDetails.getMovieId(), VIDEO_PATH);
+            //building trailer and reviews URL using moview ID
+            trailerUrl = NetworkUtils.buildMyUrl(movieDetails.getMovieId(), TRAILER_PATH);
             reviewsURL= NetworkUtils.buildMyUrl(movieDetails.getMovieId(), REVIEWS_PATH);
-            new MovieDBQueryTask(videoUrl).setListener(this).execute();
+
+            new MovieDBQueryTask(trailerUrl).setListener(this).execute();
 
         }
+
+        setupViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
+
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter viewPagerAdapter= new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.addFragment(OverviewFragment.newInstance(movieDetails.getOverview()), "OVERVIEW");
+        viewPagerAdapter.addFragment(ReviewsFragment.newInstance(reviewsURL.toString()), "REVIEW");
+        //Passing trailer reponse to get details in fragment
+        viewPagerAdapter.addFragment(TrailerFragment.newInstance(TRAILER_RESPONSE), "TRAILER");
+
+        viewPager.setAdapter(viewPagerAdapter);
 
     }
 
@@ -135,6 +160,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
                 String movieId = movieDetailsObject.optString("id");
 
                 movieDetails = new Movie(originalTitle, overview, rating, releaseDate, title, backdropURL.toString(), movieId);
+            Log.e(TAG, title);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -146,30 +172,29 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
     }
 
     //TODO move this method to a different class/folder later
-    public void viewReviews(){
-//        FragmentManager fragmentManager= getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
-//        ReviewsFragment reviewsFragment= ReviewsFragment.newInstance(reviewsURL.toString());
-//        fragmentTransaction.add(R.id.gridFrameLayout, reviewsFragment);
-//        fragmentTransaction.commit();
-
-        Intent reviewsInte= new Intent(this, ReviewActivity.class);
-        reviewsInte.putExtra("REVIEWS", reviewsURL.toString());
-        startActivity(reviewsInte);
-    }
+//    public void viewReviews(){
+////        FragmentManager fragmentManager= getSupportFragmentManager();
+////        FragmentTransaction fragmentTransaction= fragmentManager.beginTransaction();
+////        ReviewsFragment reviewsFragment= ReviewsFragment.newInstance(reviewsURL.toString());
+////        fragmentTransaction.add(R.id.gridFrameLayout, reviewsFragment);
+////        fragmentTransaction.commit();
+//
+//        Intent reviewsInte= new Intent(this, ReviewActivity.class);
+//        reviewsInte.putExtra("REVIEWS", reviewsURL.toString());
+//        startActivity(reviewsInte);
+//    }
 
     //Click Handlers [START]
     @OnClick(R.id.fabPlayTrailer)
     void playTrailer() {
-        playTrailerMethod(video.getKey());
-        Log.e("TRailer", video.getKey());
+//        playTrailerMethod(video.getKey());
 
     }
 
-    @OnClick(R.id.tvReviews)
-    void showReviews(){
-        viewReviews();
-    }
+//    @OnClick(R.id.tvReviews)
+//    void showReviews(){
+//        viewReviews();
+//    }
     //Click Handlers [END]
 
     @Override
@@ -179,9 +204,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
 
     @Override
     public void processFinish(String output) {
-        VIDEO_RESPONSE = output;
-        video =getVideoDetails(VIDEO_RESPONSE);
-        Log.i(TAG, VIDEO_RESPONSE);
+        TRAILER_RESPONSE = output;
+//        video.setVideos(getVideoDetails(TRAILER_RESPONSE));
+        Log.i(TAG, TRAILER_RESPONSE);
     }
 
     public void playTrailerMethod(String videoID){
@@ -190,33 +215,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
 
     }
 
-    private Video getVideoDetails(String response) {
-        Video video = new Video();
-        if (response != null) {
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                JSONArray resultsArray = jsonObject.optJSONArray("results");
-                //Getting Trailer Object, ignoring clip objects
-                JSONObject videoObject = resultsArray.optJSONObject(0);
-                String videoId= videoObject.optString("id");
-                String name = videoObject.optString("name");
-                String site = videoObject.optString("site");
-                String key = videoObject.optString("key");
-
-                Log.i(TAG, "VideoName "+name);
-
-                video.setName(name);
-                video.setSite(site);
-                video.setId(videoId);
-                video.setKey(key);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return video;
-    }
-
-    //Click Handlers [END]
 
 }
+
+    //Cl

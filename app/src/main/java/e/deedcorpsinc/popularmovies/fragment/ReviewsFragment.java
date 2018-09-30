@@ -46,10 +46,9 @@ public class ReviewsFragment extends Fragment implements AsyncResponse {
     @BindView(R.id.reviewsRecyclerView)
     RecyclerView recyclerView;
 
-    List<Review> reviewList= new ArrayList<>();
+    List<Review> reviewList = new ArrayList<>();
 
     ReviewsAdapter reviewsAdapter;
-    //Gson Object to deserialize passed object
 
     public ReviewsFragment() {
     }
@@ -63,51 +62,58 @@ public class ReviewsFragment extends Fragment implements AsyncResponse {
         return fragment;
     }
 
-//    @NonNull
-//    @Override
-//    public Dialog onCreateDialog(Bundle savedInstanceState) {
-//        //Check if passed serialized object is null
-//        if (getArguments() != null) {
-//            userReviews = getArguments().getString(Constants.KEY_REVIEWS);
-//            try {
-//                reviewsURL= new URL(userReviews);
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            }
-//
-//
-//        }
-//
-//        AlertDialog.Builder alertDialogBuilder= new AlertDialog.Builder(getActivity());
-//        alertDialogBuilder.setTitle("Reviews");
-//        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//        return alertDialogBuilder.create();
-//    }
 
-   @Nullable
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            userReviews = getArguments().getString(Constants.KEY_REVIEWS);
+            try {
+                reviewsURL = new URL(userReviews);
+                new MovieDBQueryTask(reviewsURL).setListener(this).execute();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            Log.i(TAG, "Got Review URL");
+        }
+    }
+
+    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_reviews, container, false);
+        View view = inflater.inflate(R.layout.fragment_reviews, container, false);
         ButterKnife.bind(this, view);
+
+        Log.e(TAG, "AsyncTask Executed\n\n");
+
+
         getReviews(REVIEWS_RESPONSE);
 
-        new MovieDBQueryTask(reviewsURL).setListener(this).execute();
-        Log.e(TAG, "something called");
 
-        reviewsAdapter= new ReviewsAdapter(reviewList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(reviewsAdapter);
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        reviewsAdapter = new ReviewsAdapter(reviewList);
+        recyclerView.setAdapter(reviewsAdapter);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        reviewsAdapter.refreshList(reviewList);
+//        Log.i(TAG, reviewList.get(0).getAuthor());
+
+
     }
 
     @Override
@@ -117,23 +123,21 @@ public class ReviewsFragment extends Fragment implements AsyncResponse {
 
     @Override
     public void processFinish(String output) {
-        REVIEWS_RESPONSE= output;
-        Log.e(TAG, REVIEWS_RESPONSE);
-
+        REVIEWS_RESPONSE = output;
     }
 
     private void getReviews(String response) {
-        Review review= new Review();
+        Review review = new Review();
         if (response != null) {
             try {
                 JSONObject jsonObject = new JSONObject(response);
                 JSONArray resultsArray = jsonObject.optJSONArray("results");
                 //Looping through the array to get all review objects
-                for (int x=0; x <resultsArray.length(); x++){
-                //Getting Trailer Object, ignoring clip objects
-                JSONObject reviewObject = resultsArray.optJSONObject(x);
-                    String author= reviewObject.optString("author");
-                    String content= reviewObject.optString("content");
+                for (int x = 0; x < resultsArray.length(); x++) {
+                    //Getting Trailer Object, ignoring clip objects
+                    JSONObject reviewObject = resultsArray.optJSONObject(x);
+                    String author = reviewObject.optString("author");
+                    String content = reviewObject.optString("content");
 
                     review.setAuthor(author);
                     review.setContent(content);
@@ -142,6 +146,7 @@ public class ReviewsFragment extends Fragment implements AsyncResponse {
                     Log.e(TAG, author);
 
                 }//end of loop
+
 
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -26,7 +26,6 @@ import static e.deedcorpsinc.popularmovies.utilities.Constants.LANGUAGE_STRING;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.MOVIEDB_BASE_URL;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.MOVIE_ENDPOINT;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.QUERY_PARAMETER;
-import static e.deedcorpsinc.popularmovies.utilities.Constants.VIDEO_PATH;
 
 public class NetworkUtils {
     private final static String TAG= NetworkUtils.class.getSimpleName();

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragment.OverviewFragment">
+
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+        <TextView
+        android:id="@+id/tvOverview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/fabMargin"
+        android:layout_marginTop="@dimen/tenDp"
+        android:layout_marginEnd="@dimen/fabMargin"
+        android:fontFamily="sans-serif"
+        android:text="@string/text_overview"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="@dimen/textSize18sp"
+        tools:text="@string/sample_overview" />
+    <!--</ScrollView>-->
+</FrameLayout>

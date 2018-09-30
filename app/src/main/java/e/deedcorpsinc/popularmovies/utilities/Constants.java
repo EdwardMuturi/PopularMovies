@@ -25,7 +25,7 @@ public class Constants {
     //video endpoint
     public static String movieId= "id";
     public static final String MOVIE_ENDPOINT= "3/movie/";
-    public static final String VIDEO_PATH= "/videos";
+    public static final String TRAILER_PATH = "/videos";
     public static final String REVIEWS_PATH= "/reviews";
 
     //optional parameters
