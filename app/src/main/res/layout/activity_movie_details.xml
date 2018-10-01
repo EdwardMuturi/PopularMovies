@@ -44,7 +44,7 @@
             app:layout_constraintVertical_bias="0.52" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabPlayTrailer"
+            android:id="@+id/fabFavourite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_favorite_white"
@@ -69,7 +69,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="@dimen/textSize18sp"
             app:layout_constraintStart_toEndOf="@id/ivDetailPoster"
-            app:layout_constraintTop_toBottomOf="@id/fabPlayTrailer"
+            app:layout_constraintTop_toBottomOf="@id/fabFavourite"
             tools:text="@string/text_movie_title" />
 
         <TextView

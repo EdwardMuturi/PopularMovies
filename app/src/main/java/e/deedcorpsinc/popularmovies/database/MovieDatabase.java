@@ -8,6 +8,7 @@ import android.util.Log;
 
 import e.deedcorpsinc.popularmovies.model.FavouriteMovie;
 import e.deedcorpsinc.popularmovies.model.Movie;
+import e.deedcorpsinc.popularmovies.utilities.FavouriteDAO;
 
 @Database(entities = {FavouriteMovie.class}, version = 1, exportSchema = false)
 public abstract class MovieDatabase  extends RoomDatabase {
@@ -21,11 +22,13 @@ public abstract class MovieDatabase  extends RoomDatabase {
         if (sInstance == null){
             Log.e(TAG, "Creating new database instance");
             sInstance= Room.databaseBuilder(context.getApplicationContext(), MovieDatabase.class, MovieDatabase.DATABASE_NAME)
+                    .fallbackToDestructiveMigration()
                     .build();
         }
         Log.e(TAG, "Getting the database instance");
         return sInstance;
     }
 
+    public abstract FavouriteDAO favouriteDAO();
 
 }

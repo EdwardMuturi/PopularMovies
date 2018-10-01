@@ -26,9 +26,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import e.deedcorpsinc.popularmovies.adpater.ViewPagerAdapter;
+import e.deedcorpsinc.popularmovies.database.MovieDatabase;
 import e.deedcorpsinc.popularmovies.fragment.OverviewFragment;
 import e.deedcorpsinc.popularmovies.fragment.ReviewsFragment;
 import e.deedcorpsinc.popularmovies.fragment.TrailerFragment;
+import e.deedcorpsinc.popularmovies.model.FavouriteMovie;
 import e.deedcorpsinc.popularmovies.model.Movie;
 import e.deedcorpsinc.popularmovies.model.Review;
 import e.deedcorpsinc.popularmovies.model.Video;
@@ -71,6 +73,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
     @BindView(R.id.constraintTrailer)
     ConstraintLayout constraintLayout;
 
+    private MovieDatabase mDb;
 
 
     Movie movieDetails;
@@ -81,7 +84,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
     Video video;
 
     //Review object list to be passed to fragment
-    List<Review> reviewList= new ArrayList<>();
+    List<Review> reviewList = new ArrayList<>();
     URL reviewsURL;
 
     @Override
@@ -89,6 +92,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
         ButterKnife.bind(this);
+        mDb = MovieDatabase.getsInstance(getApplicationContext());
 
 
         if (getIntent().getExtras().isEmpty()) {
@@ -119,7 +123,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
 
             //building trailer and reviews URL using moview ID
             trailerUrl = NetworkUtils.buildMyUrl(movieDetails.getMovieId(), TRAILER_PATH);
-            reviewsURL= NetworkUtils.buildMyUrl(movieDetails.getMovieId(), REVIEWS_PATH);
+            reviewsURL = NetworkUtils.buildMyUrl(movieDetails.getMovieId(), REVIEWS_PATH);
 
             new MovieDBQueryTask(trailerUrl).setListener(this).execute();
 
@@ -131,7 +135,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter viewPagerAdapter= new ViewPagerAdapter(getSupportFragmentManager());
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(OverviewFragment.newInstance(movieDetails.getOverview()), "OVERVIEW");
         viewPagerAdapter.addFragment(ReviewsFragment.newInstance(reviewsURL.toString()), "REVIEW");
         //Passing trailer reponse to get details in fragment
@@ -160,7 +164,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
                 String movieId = movieDetailsObject.optString("id");
 
                 movieDetails = new Movie(originalTitle, overview, rating, releaseDate, title, backdropURL.toString(), movieId);
-            Log.e(TAG, title);
+                Log.e(TAG, title);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -185,9 +189,28 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
 //    }
 
     //Click Handlers [START]
-    @OnClick(R.id.fabPlayTrailer)
-    void playTrailer() {
-//        playTrailerMethod(video.getKey());
+    @OnClick(R.id.fabFavourite)
+    void markFavourite() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FavouriteMovie favouriteMovie;
+        String overview = movieDetails.getOverview();
+        String rating = movieDetails.getVote_average();
+        String releaseDate = movieDetails.getReleaseDate();
+        String originalTitle = movieDetails.getoriginalTitle();
+        String title = movieDetails.getTitle();
+        String backdropPath = movieDetails.getBackdropPath();
+        String movieID = movieDetails.getMovieId();
+        URL backdropURL = NetworkUtils.buildImageUrl(backdropPath);
+
+
+                favouriteMovie = new FavouriteMovie(movieID, title, originalTitle, backdropURL.toString(), backdropPath, releaseDate, rating);
+                mDb.favouriteDAO().insertAll(favouriteMovie);
+            }
+        }).start();
+
 
     }
 
@@ -209,8 +232,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
         Log.i(TAG, TRAILER_RESPONSE);
     }
 
-    public void playTrailerMethod(String videoID){
-        Intent youtubeIntent= new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:"+ videoID));
+    public void playTrailerMethod(String videoID) {
+        Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoID));
         startActivity(youtubeIntent);
 
     }
@@ -218,4 +241,4 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
 
 }
 
-    //Cl
+//Cl

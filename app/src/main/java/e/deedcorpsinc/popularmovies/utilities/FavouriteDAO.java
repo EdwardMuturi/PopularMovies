@@ -17,7 +17,7 @@ public interface FavouriteDAO {
     List<FavouriteMovie> getAll();
 
     @Insert
-    void insertAll(List<FavouriteMovie> favouriteMovies);
+    void insertAll(FavouriteMovie favouriteMovies);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void update(FavouriteMovie favouriteMovie);
