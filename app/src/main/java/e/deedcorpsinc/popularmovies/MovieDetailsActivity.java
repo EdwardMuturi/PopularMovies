@@ -119,11 +119,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
 //            tvRating.setText(getString(R.string.text_rating, movieDetails.getVote_average()));
             tvReleaseDate.setText(getString(R.string.text_release_date, movieDetails.getReleaseDate()));
             tvTitle.setText(movieDetails.getTitle());
-            setTitle(movieDetails.getoriginalTitle());
+            setTitle(movieDetails.getOriginalTitle());
 
             //building trailer and reviews URL using moview ID
-            trailerUrl = NetworkUtils.buildMyUrl(movieDetails.getMovieId(), TRAILER_PATH);
-            reviewsURL = NetworkUtils.buildMyUrl(movieDetails.getMovieId(), REVIEWS_PATH);
+            trailerUrl = NetworkUtils.buildMyUrl(String.valueOf(movieDetails.getId()), TRAILER_PATH);
+            reviewsURL = NetworkUtils.buildMyUrl(String.valueOf(movieDetails.getId()), REVIEWS_PATH);
 
             new MovieDBQueryTask(trailerUrl).setListener(this).execute();
 
@@ -197,12 +197,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements AsyncResp
             public void run() {
                 FavouriteMovie favouriteMovie;
         String overview = movieDetails.getOverview();
-        String rating = movieDetails.getVote_average();
+        String rating = movieDetails.getVoteAverage();
         String releaseDate = movieDetails.getReleaseDate();
-        String originalTitle = movieDetails.getoriginalTitle();
+        String originalTitle = movieDetails.getOriginalTitle();
         String title = movieDetails.getTitle();
         String backdropPath = movieDetails.getBackdropPath();
-        String movieID = movieDetails.getMovieId();
+        String movieID = String.valueOf(movieDetails.getId());
         URL backdropURL = NetworkUtils.buildImageUrl(backdropPath);
 
 

@@ -79,6 +79,7 @@ public class NetworkUtils {
             e.printStackTrace();
         }
 
+        Log.e("Main", "I've been called");
         return imageUrl;
     }
 

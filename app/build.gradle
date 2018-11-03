@@ -49,8 +49,13 @@ dependencies {
     //Picasso dependency
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    //Butter Knife library
+    //ButterKnife library
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
 
 }

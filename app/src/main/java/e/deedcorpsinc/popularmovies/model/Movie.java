@@ -1,113 +1,155 @@
 package e.deedcorpsinc.popularmovies.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
-import java.net.URL;
+import java.util.List;
 
-public class Movie implements Parcelable{
-    //variable declaration
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+//@Entity
+public class Movie {
+
+//    @SerializedName("id")
+//    @Expose
+//    @PrimaryKey(autoGenerate = false)
+    private int id;
+
+
+//    @SerializedName("vote_average")
+//    @Expose
+    private String voteAverage;
+
+//    @SerializedName("title")
+//    @Expose
     private String title;
-    private String overview;
-    private String vote_average;
-    private String releaseDate;
 
-    private String moviePoster;
+//    @SerializedName("poster_path")
+//    @Expose
+    private String posterPath;
+
+//    @SerializedName("original_title")
+//    @Expose
+    private String originalTitle;
+
+
+//    @SerializedName("backdrop_path")
+//    @Expose
     private String backdropPath;
 
-
-
-    private String movieId;
-
-    //[START] constructor
+//    @SerializedName("overview")
+//    @Expose
+    private String overview;
+//    @SerializedName("release_date")
+//    @Expose
+    private String releaseDate;
 
     public Movie() {
-
     }
 
-    //constructor without moviePoster field
-    public Movie(String originalTitle, String overview, String vote_average, String releaseDate, String title, String backdropPath, String mId) {
+    public Movie(int id, String voteAverage, String title, String posterPath, String originalTitle, String backdropPath, String overview, String releaseDate) {
+        super();
+        this.id = id;
+        this.voteAverage = voteAverage;
+        this.title = title;
+        this.posterPath = posterPath;
+        this.originalTitle = originalTitle;
+        this.backdropPath = backdropPath;
         this.overview = overview;
-        this.vote_average = vote_average;
         this.releaseDate = releaseDate;
-        this.title= title;
-        this.backdropPath= backdropPath;
-        this.movieId= mId;
     }
-    //[END] Constructor
 
-    // [START] Setters and Getters
+    public Movie(String voteAverage, String title, String posterPath, String originalTitle, String backdropPath, String overview, String releaseDate) {
+        this.voteAverage = voteAverage;
+        this.title = title;
+        this.posterPath = posterPath;
+        this.originalTitle = originalTitle;
+        this.backdropPath = backdropPath;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+    }
+
+    //[START] Getters and Setters
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(String voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
     public String getTitle() {
         return title;
     }
 
-    public String getoriginalTitle() {
-        return title;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getOverview() {
-        return overview;
+    public String getPosterPath() {
+        return posterPath;
     }
 
-    public String getVote_average() {
-        return vote_average;
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
     }
 
-    public String getReleaseDate() {
-        return releaseDate;
+    public String getOriginalTitle() {
+        return originalTitle;
+    }
+
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
     }
 
     public String getBackdropPath() {
         return backdropPath;
     }
 
-    public String getMovieId() {
-        return movieId;
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
     }
 
-    //[END] Setter and Getter
+    public String getOverview() {
+        return overview;
+    }
 
-    //[START] Parcelable methods
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
     @Override
-    public int describeContents() {
-        return 0;
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", voteAverage='" + voteAverage + '\'' +
+                ", title='" + title + '\'' +
+                ", posterPath='" + posterPath + '\'' +
+                ", originalTitle='" + originalTitle + '\'' +
+                ", backdropPath='" + backdropPath + '\'' +
+                ", overview='" + overview + '\'' +
+                ", releaseDate='" + releaseDate + '\'' +
+                '}';
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int  flags) {
-        parcel.writeString(title);
-        parcel.writeString(overview);
-        parcel.writeString(vote_average);
-        parcel.writeString(releaseDate);
 
-        parcel.writeString(moviePoster.toString());
-        parcel.writeString(backdropPath.toString());
-
-    }
-
-    private Movie (Parcel input){
-        title= input.readString();
-        overview= input.readString();
-        vote_average= input.readString();
-        releaseDate= input.readString();
-        moviePoster=  input.readString();
-        backdropPath= input.readString();
-    }
-
-    public  static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>(){
-
-        @Override
-        public Movie createFromParcel(Parcel parcel) {
-           return new Movie(parcel);
-        }
-
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
-
-    //[END] Parcelable methods
-
+//[END] Getters and Setters
 
 }

@@ -1,6 +1,7 @@
 package e.deedcorpsinc.popularmovies.adpater;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,21 +14,23 @@ import java.net.URL;
 import java.util.List;
 
 import e.deedcorpsinc.popularmovies.R;
+import e.deedcorpsinc.popularmovies.model.Movie;
+import e.deedcorpsinc.popularmovies.utilities.NetworkUtils;
 
 public class ImageAdapter extends BaseAdapter {
     private static final String IMAGE_ADAPTER_TAG = ImageAdapter.class.getSimpleName();
     private Context context;
-    private List<URL> movie;
+    private List<Movie> movies;
 
-    public ImageAdapter(Context context, List<URL> movies) {
+    public ImageAdapter(Context context, List<Movie> movies) {
         this.context = context;
-        movie = movies;
+        movies = movies;
     }
 
     @Override
     public int getCount() {
-        if (movie != null)
-            return movie.size();
+        if (movies != null)
+            return movies.size();
         else
             return 0;
     }
@@ -44,15 +47,17 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        movie.get(position);
+        Movie movie= movies.get(position);
         if (convertView == null){
             convertView= LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
         }
 
         ImageView imageView= convertView.findViewById(R.id.movieImage);
+        URL imagePath= NetworkUtils.buildImageUrl(movie.getPosterPath());
+        Log.e("MainAct", movie.getPosterPath());
 
         Picasso.get().
-                load(movie.get(position).toString())
+                load(imagePath.toString())
                 .into(imageView);
 
         return convertView;

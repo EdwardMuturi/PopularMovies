@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,12 +26,20 @@ import butterknife.ButterKnife;
 import e.deedcorpsinc.popularmovies.adpater.ImageAdapter;
 import e.deedcorpsinc.popularmovies.database.MovieDatabase;
 import e.deedcorpsinc.popularmovies.model.FavouriteMovie;
+import e.deedcorpsinc.popularmovies.model.Movie;
+import e.deedcorpsinc.popularmovies.model.MovieResponse;
+import e.deedcorpsinc.popularmovies.utilities.APIInterface;
 import e.deedcorpsinc.popularmovies.utilities.AsyncResponse;
 import e.deedcorpsinc.popularmovies.utilities.Constants;
 import e.deedcorpsinc.popularmovies.utilities.MovieDBQueryTask;
 import e.deedcorpsinc.popularmovies.utilities.NetworkUtils;
+import e.deedcorpsinc.popularmovies.utilities.RetrofitClientInstance;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.os.AsyncTask.THREAD_POOL_EXECUTOR;
+import static e.deedcorpsinc.popularmovies.utilities.Constants.API_KEY;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.POPULAR_MOVIE;
 import static e.deedcorpsinc.popularmovies.utilities.Constants.TOP_RATED;
 import static e.deedcorpsinc.popularmovies.utilities.NetworkUtils.makeImageUrlList;
@@ -61,17 +70,20 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
         ButterKnife.bind(this);
         mDb = MovieDatabase.getsInstance(getApplicationContext());
 
-        mostPopularURL = NetworkUtils.buildUrl(POPULAR_MOVIE);
-        topRatedURL = NetworkUtils.buildUrl(TOP_RATED);
+//        mostPopularURL = NetworkUtils.buildUrl(POPULAR_MOVIE);
+//        topRatedURL = NetworkUtils.buildUrl(TOP_RATED);
 
 
-//        movieDBQueryTask.execute(topRatedURL);
-//        movieDBQueryTask.delegate = this;
-        new MovieDBQueryTask(topRatedURL).setListener(this, 1).executeOnExecutor(THREAD_POOL_EXECUTOR);
-        new MovieDBQueryTask(mostPopularURL).setListener(this, 2).executeOnExecutor(THREAD_POOL_EXECUTOR);
-
+//        new MovieDBQueryTask(topRatedURL).setListener(this, 1).executeOnExecutor(THREAD_POOL_EXECUTOR);
+//        new MovieDBQueryTask(mostPopularURL).setListener(this, 2).executeOnExecutor(THREAD_POOL_EXECUTOR);
 
         checkInternetConnection();
+        //TODO check internet connnection first then make request, otherwise retry
+        fetchPopularMovies(API_KEY);
+
+//        imageAdapter.notifyDataSetChanged();
+
+
 
         //Handling poster click: open movie details
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -89,6 +101,31 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
             }
         });
 
+    }
+
+    private void fetchPopularMovies(String apiKey) {
+        APIInterface apiService = RetrofitClientInstance.getRetrofitInstance().create(APIInterface.class);
+        Call<MovieResponse> call = apiService.getTopRatedMovies(apiKey);
+
+        call.enqueue(new Callback<MovieResponse>() {
+            @Override
+            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        List<Movie> movies = response.body().getResults();
+                        Log.e(TAG, "Number of Movies Returned " + movies.size());
+                        Log.e(TAG, "Poster  " + movies.get(12).getPosterPath());
+                        imageAdapter= new ImageAdapter(MainActivity.this, movies);
+                        gridView.setAdapter(imageAdapter);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieResponse> call, Throwable t) {
+                Log.e(TAG, t.toString());
+            }
+        });
     }
 
     void checkInternetConnection() {
@@ -113,15 +150,15 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.actionPopularity) {
-            imageAdapter = new ImageAdapter(this, mostPopularURLList);
-            gridView.setAdapter(imageAdapter);
-            imageAdapter.notifyDataSetChanged();
+//            imageAdapter = new ImageAdapter(this, mostPopularURLList);
+//            gridView.setAdapter(imageAdapter);
+//            imageAdapter.notifyDataSetChanged();
             return true;
 
         } else if (item.getItemId() == R.id.actionTopRated) {
-            imageAdapter = new ImageAdapter(this, topRatedURLList);
-            gridView.setAdapter(imageAdapter);
-            imageAdapter.notifyDataSetChanged();
+//            imageAdapter = new ImageAdapter(this, topRatedURLList);
+//            gridView.setAdapter(imageAdapter);
+//            imageAdapter.notifyDataSetChanged();
             return true;
         } else if (item.getItemId() == R.id.actionFavourite) {
             new Thread(new Runnable() {
@@ -139,9 +176,9 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
                     }
                 }
             }).start();
-            imageAdapter = new ImageAdapter(this, favouritesURLList);
-            gridView.setAdapter(imageAdapter);
-            imageAdapter.notifyDataSetChanged();
+//            imageAdapter = new ImageAdapter(this, favouritesURLList);
+//            gridView.setAdapter(imageAdapter);
+//            imageAdapter.notifyDataSetChanged();
 
             return true;
         }
@@ -151,27 +188,19 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
     //get Async Task result and populate list
     @Override
     public void processFinish(String output, int RC) {
-        switch (RC) {
-            case 1:
-                topRatedURLList = makeImageUrlList(output);
-                imageAdapter = new ImageAdapter(this, topRatedURLList);
-                Constants.JSON_RESPONSE = output;
-                gridView.setAdapter(imageAdapter);
-                break;
-            case 2:
-                mostPopularURLList = makeImageUrlList(output);
-                imageAdapter = new ImageAdapter(this, mostPopularURLList);
-                Constants.JSON_RESPONSE = output;
-                gridView.setAdapter(imageAdapter);
-                break;
-        }
-//        mostPopularURLList = makeImageUrlList(output);
-//        Constants.JSON_RESPONSE= output;
-//        imageAdapter = new ImageAdapter(this, mostPopularURLList);
-//        gridView.setAdapter(imageAdapter);
-//
-//        for (int h = 0; h < mostPopularURLList.size(); h++) {
-//            Log.e("Posters", mostPopularURLList.get(h).toString() + "\n");
+//        switch (RC) {
+//            case 1:
+//                topRatedURLList = makeImageUrlList(output);
+//                imageAdapter = new ImageAdapter(this, topRatedURLList);
+//                Constants.JSON_RESPONSE = output;
+//                gridView.setAdapter(imageAdapter);
+//                break;
+//            case 2:
+//                mostPopularURLList = makeImageUrlList(output);
+//                imageAdapter = new ImageAdapter(this, mostPopularURLList);
+//                Constants.JSON_RESPONSE = output;
+//                gridView.setAdapter(imageAdapter);
+//                break;
 //        }
 
     }
